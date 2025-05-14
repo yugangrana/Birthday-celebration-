@@ -1,6 +1,10 @@
-import React from "react"; import { motion } from "framer-motion"; import { SparklesCore } from "@/components/ui/sparkles"; import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button";
+import React, { useState } from "react"; import { motion } from "framer-motion"; import { SparklesCore } from "@/components/ui/sparkles"; import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import Confetti from "react-confetti"; import useWindowSize from "react-use/lib/useWindowSize";
 
-export default function BirthdayWishPage() { return ( <div className="min-h-screen bg-gradient-to-br from-purple-800 via-pink-500 to-yellow-400 flex items-center justify-center p-4"> <SparklesCore background="transparent" className="absolute inset-0 z-0" />
+export default function BirthdayWishPage() { const { width, height } = useWindowSize(); const [showConfetti, setShowConfetti] = useState(false); const [showModal, setShowModal] = useState(false);
+
+const handleCelebrate = () => { setShowConfetti(true); setShowModal(true); const audio = new Audio("/happy-birthday.mp3"); // Place the mp3 in public folder audio.play(); };
+
+return ( <div className="min-h-screen bg-gradient-to-br from-purple-800 via-pink-500 to-yellow-400 flex items-center justify-center p-4 relative overflow-hidden"> {showConfetti && <Confetti width={width} height={height} numberOfPieces={300} recycle={false} />} <SparklesCore background="transparent" className="absolute inset-0 z-0" />
 
 <motion.div
     initial={{ opacity: 0, scale: 0.8 }}
@@ -11,23 +15,34 @@ export default function BirthdayWishPage() { return ( <div className="min-h-scre
     <Card className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-6">
       <CardContent>
         <h1 className="text-4xl md:text-5xl font-extrabold text-purple-700 mb-4">
-          Happy Birthday, My Friend!
+          Happy Birthday, Devansh!
         </h1>
         <p className="text-lg md:text-xl text-gray-700 mb-6">
-          Wishing you a day filled with laughter, joy, and magical moments! May your year ahead be as bright and beautiful as your smile.
+          Wishing you a day filled with laughter, joy, and magical moments, Devansh! May your year ahead be as bright and beautiful as your smile.
         </p>
         <motion.div
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           className="inline-block"
         >
-          <Button className="bg-pink-600 text-white text-lg px-6 py-3 rounded-full shadow-lg hover:bg-pink-700">
+          <Button onClick={handleCelebrate} className="bg-pink-600 text-white text-lg px-6 py-3 rounded-full shadow-lg hover:bg-pink-700">
             Let's Celebrate!
           </Button>
         </motion.div>
       </CardContent>
     </Card>
   </motion.div>
+
+  {showModal && (
+    <div className="fixed inset-0 bg-black/50 z-20 flex items-center justify-center">
+      <div className="bg-white rounded-xl p-6 text-center shadow-2xl max-w-sm">
+        <img src="/cake.gif" alt="Cake" className="mx-auto w-40 h-40 mb-4" />
+        <h2 className="text-2xl font-bold text-purple-700 mb-2">Make a Wish, Devansh!</h2>
+        <p className="text-gray-700 mb-4">Enjoy your special day with love, surprises, and sweet moments.</p>
+        <Button onClick={() => setShowModal(false)} className="bg-purple-600 text-white px-4 py-2 rounded-full">Close</Button>
+      </div>
+    </div>
+  )}
 </div>
 
 ); }
